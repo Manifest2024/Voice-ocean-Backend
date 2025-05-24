@@ -1,0 +1,698 @@
+{
+	"info": {
+		"_postman_id": "de6a75d4-8b42-4892-a835-b87093f0e0f5",
+		"name": "VoiceOcean",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30168504"
+	},
+	"item": [
+		{
+			"name": "artist",
+			"item": [
+				{
+					"name": "Create Artists",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Max\",\r\n    \"address\": \"123 Main Street, City, Country\",\r\n    \"gender\": \"Male\",\r\n    \"title\":\"someting\",\r\n    \"description\":\"someting\",\r\n    // \"profile_photo\": \"https://example.com/profile_photo.jpg\",\r\n    \"accents\": \"British, American\",\r\n    \"roles\": \"Actor, Voice Actor\",\r\n    \"styles\": \"Narration, Commercial\",\r\n    \"microphone\": \"Blue Yeti\",\r\n    \"services_offered\": \"Voiceovers, Narration, Podcasting\",\r\n    \"availability_days\": \"Monday, Tuesday, Wednesday\",\r\n    \"availability_time\": \"9:00 AM - 5:00 PM\",\r\n    \"languages\":\"marathi,hindi\",\r\n    \"category\":\"Annimation,dubbing\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/create/artists",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"create",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update artist",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    // \"name\": \"Mahesh\",\r\n    \"languages\":\"Marathi,hindi\",\r\n    // \"address\": \"123 Main Street, City, Country\",\r\n    // \"gender\": \"Male\",\r\n    // \"profile_photo\": \"https://example.com/profile_photo.jpg\",\r\n    \"accents\": \"British, American\",\r\n    \"roles\": \"Actor, Voice Actor\",\r\n    \"styles\": \"Narration, Commercial\",\r\n    \"microphone\": \"Blue Yeti\",\r\n    \"services_offered\": \"Voiceovers, Narration, Podcasting\",\r\n    \"availability_days\": \"Monday, Tuesday, Wednesday\",\r\n    \"availability_time\": \"9:00 AM - 5:00 PM\",\r\n    \"title\":\"nothing\",\r\n    \"description\":\"\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/update/artist/1AL4ax7knMDt2sH4dVyjxJ",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"update",
+								"artist",
+								"1AL4ax7knMDt2sH4dVyjxJ"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Artist profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/artists/profile/1AL4ax7knMDt2sH4dVyjxJ",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"artists",
+								"profile",
+								"1AL4ax7knMDt2sH4dVyjxJ"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All artist",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/get/all/artists",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"get",
+								"all",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "languages & category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/get/languages/and/category",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"get",
+								"languages",
+								"and",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search artist",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/search/artist?name=Ashi",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"search",
+								"artist"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Ashi"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete artist",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/delete/artist/5mxsN88aXgVHrsPAPSysq6",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"delete",
+								"artist",
+								"5mxsN88aXgVHrsPAPSysq6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Artist voice sample",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/artists?gender=Male&language=Hindi&category=Dubbing",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"artists"
+							],
+							"query": [
+								{
+									"key": "gender",
+									"value": "Male"
+								},
+								{
+									"key": "language",
+									"value": "Hindi"
+								},
+								{
+									"key": "category",
+									"value": "Dubbing"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "voice sample",
+			"item": [
+				{
+					"name": "Add voice samples for Artist",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "language",
+									"value": "English",
+									"type": "text"
+								},
+								{
+									"key": "sample",
+									"type": "file",
+									"src": "/C:/Users/Ashish/Downloads/file_example_MP3_700KB.mp3"
+								},
+								{
+									"key": "artist_id",
+									"value": "1AL4ax7knMDt2sH4dVyjxJ",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Animation",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "somethingu",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/add/voice/samples",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"add",
+								"voice",
+								"samples"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update voice sample",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "sample",
+									"type": "file",
+									"src": "/C:/Users/Ashish/Downloads/file_example_MP3_700KB.mp3"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/update/voice/sample/aDdbaZoMcGy3Vo15gpBh5k",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"update",
+								"voice",
+								"sample",
+								"aDdbaZoMcGy3Vo15gpBh5k"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update quotations",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\":\"COMPLETED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/update/quotation/87fbUz2jsWw8zRDkTsLhj2",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"update",
+								"quotation",
+								"87fbUz2jsWw8zRDkTsLhj2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Voice sample data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/artists",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all voice samples",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/get/all/voice/samples",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"get",
+								"all",
+								"voice",
+								"samples"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "get quatation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"artistId\":\"1AL4ax7knMDt2sH4dVyjxJ\",\r\n  \"language\": \"English\",\r\n  \"style\": \"Formal\",\r\n  \"script\": \"Screenplay\",\r\n  \"category\": \"Film\",\r\n  \"instruction\": \"Please provide voice samples with natural and clear pronunciation.\",\r\n  \"email\": \"example@example.com\",\r\n  \"artist_demo\": \"https://example.com/demo.mp3\",\r\n  \"status\":\"OPEN\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/get/quotation",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"get",
+								"quotation"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all quotations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/get/all/quotations",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"get",
+								"all",
+								"quotations"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "current projects",
+			"item": [
+				{
+					"name": "add current projects",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"seo_title\": \"Example SEO Title\",\r\n    \"project_description\": \"Example project description\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/add/current/projects",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"add",
+								"current",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update project",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"seo_title\": \"Example SEO\",\r\n    \"project_description\": \"Example project description\",\r\n    \"project_date\":\"2023-09-09\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/update/current/projects/7AV48ALVfYyfjKR3LoYRaa",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"update",
+								"current",
+								"projects",
+								"7AV48ALVfYyfjKR3LoYRaa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete project",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/delete/current/projects/h5TS9vSzgKTAkfhkfzpj3Z",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"delete",
+								"current",
+								"projects",
+								"h5TS9vSzgKTAkfhkfzpj3Z"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/get/all/current/projects",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"get",
+								"all",
+								"current",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "testimonials",
+			"item": [
+				{
+					"name": "add testimonials",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"seo_title\": \"Example Testimonial SEO Title\",\r\n    \"testimonial_name\": \"John Doe\",\r\n    \"location\": \"New York\",\r\n    \"testimonial_description\": \"This is an example testimonial description.\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/add/testimonials",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"add",
+								"testimonials"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update testimonials",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"seo_title\": \"Example\",\r\n    \"testimonial_name\": \"John \",\r\n    \"location\": \"New \",\r\n    \"testimonial_description\": \"This is an description.\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/update/testimonials/rP8h742K4kbXV4HiXEqN4Z",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"update",
+								"testimonials",
+								"rP8h742K4kbXV4HiXEqN4Z"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete testimonials",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/delete/testimonials/rP8h742K4kbXV4HiXEqN4Z",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"delete",
+								"testimonials",
+								"rP8h742K4kbXV4HiXEqN4Z"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all testimonials",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/get/all/testimonials",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"get",
+								"all",
+								"testimonials"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "client logos",
+			"item": [
+				{
+					"name": "add client logo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "clientLogo",
+									"type": "file",
+									"src": "/C:/Users/Ashish/Downloads/885px-Node.js_logo.svg.png"
+								},
+								{
+									"key": "seo_title",
+									"value": "who cares\n",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/clients/upload",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"clients",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all logos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/get/all/client/logos",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"get",
+								"all",
+								"client",
+								"logos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete logo",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/delete/client/logo/hov1h3csFkTZKB2Y9NZxGP",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"delete",
+								"client",
+								"logo",
+								"hov1h3csFkTZKB2Y9NZxGP"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboard API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/dashboard/data",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"dashboard",
+						"data"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
