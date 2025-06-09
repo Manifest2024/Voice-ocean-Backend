@@ -25,6 +25,7 @@ router.post(
 router.post("/create/artists", artist.addArtist);
 router.get("/artists", artist.getArtist);
 router.get("/artists/profile/:artistId", artist.getArtistData);
+router.get("/artists/profile/name/:name", artist.getArtistDataByName);
 router.patch("/update/artist/:artistId", artist.updateArtist);
 router.delete("/delete/artist/:artistId", artist.deleteArtist);
 router.get("/get/all/artists", artist.getAllArtist);
