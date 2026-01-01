@@ -377,7 +377,7 @@ exports.getArtistData = (req, res) => {
                 return;
               }
 
-              const baseURL = "https://voiceoceanllp.com:3003/";
+              const baseURL = "https://admin.voiceoceanllp.com/api/";
               const updatedVoiceSamples = voiceSamplesResults.map((sample) => ({
                 ...sample,
                 sample: `${baseURL}${sample.sample}`,
@@ -453,7 +453,7 @@ exports.getArtistDataByName = (req, res) => {
                 return;
               }
 
-              const baseURL = "https://voiceoceanllp.com:3003/";
+              const baseURL = "https://admin.voiceoceanllp.com/api/";
               const updatedVoiceSamples = voiceSamplesResults.map((sample) => ({
                 ...sample,
                 sample: `${baseURL}${sample.sample}`,
