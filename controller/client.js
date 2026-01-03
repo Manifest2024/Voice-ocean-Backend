@@ -57,7 +57,7 @@ exports.getAllClients = (req, res) => {
     
     const modifiedResults = results.map((result) => ({
       ...result,
-      client_logo: `${req.protocol}://${req.get("host")}/${result.client_logo}`,
+      client_logo: `https://${req.get("host")}/${result.client_logo}`,
     }));
 
     res.status(200).json(modifiedResults);

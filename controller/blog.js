@@ -63,7 +63,7 @@ exports.getAllBlogs = (req, res) => {
     // Modify results to include the full URL for the image path
     const modifiedResults = results.map((result) => ({
       ...result,
-      image: `${req.protocol}://${req.get("host")}/${result.image}`,
+      image: `https://${req.get("host")}/${result.image}`,
     }));
 
     res.status(200).json(modifiedResults);
@@ -227,7 +227,7 @@ exports.getBlogById = (req, res) => {
     const blog = results[0];
 
     // Modify the image path to include the host and protocol
-    blog.image = `${req.protocol}://${req.get("host")}/${blog.image}`;
+    blog.image = `https://${req.get("host")}/${blog.image}`;
 
     res.status(200).json(blog);
   });

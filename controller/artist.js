@@ -206,7 +206,7 @@ exports.addArtist = (req, res) => {
 //         (!category || row.category === category)
 //       ) {
 //         artistsData[id].voice_samples.push({
-//           sample: `${req.protocol}://${req.get("host")}/${sample}`,
+//           sample: `https://${req.get("host")}/${sample}`,
 //           language: sample_language,
 //           category: category,
 //         });
@@ -311,7 +311,7 @@ exports.getArtist = (req, res) => {
       // Add voice sample only if it matches the category (if provided)
       if (!category || row.category === category) {
         artistsData[id].voice_samples.push({
-          sample: `${req.protocol}://${req.get("host")}/${sample}`,
+          sample: `https://${req.get("host")}/${sample}`,
           language: sample_language,
           category: row.category,
         });

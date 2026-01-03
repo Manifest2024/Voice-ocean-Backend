@@ -45,7 +45,7 @@ exports.getAllVoiceSample = (req, res) => {
 
     const modifiedResults = results.map((result) => ({
       ...result,
-      sample: `${req.protocol}://${req.get("host")}/${result.sample}`,
+      sample: `https://${req.get("host")}/${result.sample}`,
     }));
 
     res.status(200).json(modifiedResults);
