@@ -6,46 +6,40 @@ const { pipeline } = require("stream");
 const { v4: uuidv4 } = require("uuid");
 
 exports.addBlog = (req, res) => {
-  const { title, content } = req.body;
-  const blogImage = req.file; // Assuming you use multer for file uploads
+  const { title, content, meta_title, meta_description } = req.body;
+  const blogImage = req.file;
 
-  // Validate required fields
   if (!title || !content || !blogImage) {
-    res.status(400).json("Title, content, or image is missing");
-    return;
+    return res.status(400).json("Title, content, or image is missing");
   }
 
-  const imageId = uuidv4(); // Unique ID for the image
-  const ext = blogImage.originalname.split(".").pop(); // Get file extension
-  const imagePath = `blog_images/${imageId}.${ext}`; // Target file path
+  const imageId = uuidv4();
+  const ext = blogImage.originalname.split(".").pop();
+  const imagePath = `blog_images/${imageId}.${ext}`;
 
-  // Move the uploaded file to the target folder
   fs.rename(blogImage.path, imagePath, (err) => {
     if (err) {
-      console.error("Error moving blog image:", err);
-      res.status(500).json("Error saving blog image");
-      return;
+      return res.status(500).json("Error saving blog image");
     }
 
-    // Insert the blog data into the database
-    const insertBlogQuery =
-      "INSERT INTO blogs (title, image, content) VALUES (?, ?, ?)";
-    connection.query(
-      insertBlogQuery,
-      [title, imagePath, content],
-      (err, result) => {
-        if (err) {
-          console.error("Error adding blog:", err);
-          res.status(500).json("Error adding blog");
-          return;
-        }
+    const sql = `
+      INSERT INTO blogs (title, meta_title, meta_description, image, content)
+      VALUES (?, ?, ?, ?, ?)
+    `;
 
-        console.log("Blog added successfully");
-        res.status(200).json("Blog added successfully");
+    connection.query(
+      sql,
+      [title, meta_title, meta_description, imagePath, content],
+      (err) => {
+        if (err) {
+          return res.status(500).json("Error adding blog");
+        }
+        res.status(200).json({ message: "Blog added successfully" });
       }
     );
   });
 };
+
 
 // get all blogs
 exports.getAllBlogs = (req, res) => {
@@ -121,89 +115,55 @@ exports.deleteBlog = (req, res) => {
 
 
 exports.updateBlog = (req, res) => {
-  const { id } = req.params; 
-  const { title, content } = req.body; 
+  const { id } = req.params;
+  const { title, content, meta_title, meta_description } = req.body;
   const blogImage = req.file;
 
   const fetchBlogQuery = "SELECT * FROM blogs WHERE id = ?";
   connection.query(fetchBlogQuery, [id], (err, results) => {
-    if (err) {
-      console.error("Error fetching blog:", err);
-      res
-        .status(500)
-        .json({ error: "An error occurred while fetching the blog" });
-      return;
-    }
-
-    if (results.length === 0) {
-      res.status(404).json({ error: "Blog not found" });
-      return;
+    if (err || results.length === 0) {
+      return res.status(404).json({ error: "Blog not found" });
     }
 
     const currentBlog = results[0];
-    let imagePath = currentBlog.image; 
+    let imagePath = currentBlog.image;
 
     if (blogImage) {
-      const ext = blogImage.originalname.split(".").pop(); // Get file extension
-      imagePath = `blog_images/${uuidv4()}.${ext}`; // New image path
+      const ext = blogImage.originalname.split(".").pop();
+      imagePath = `blog_images/${uuidv4()}.${ext}`;
 
-      // Replace the old image file with the new one
       pipeline(
         fs.createReadStream(blogImage.path),
         fs.createWriteStream(imagePath),
-        (err) => {
-          if (err) {
-            console.error("Error saving blog image:", err);
-            res.status(500).json({ error: "Error saving blog image" });
-            return;
-          }
-
-          // Delete the old image file
-          if (currentBlog.image) {
-            fs.unlink(currentBlog.image, (err) => {
-              if (err) {
-                console.error("Error deleting old image file:", err);
-              }
-            });
-          }
+        () => {
+          if (currentBlog.image) fs.unlink(currentBlog.image, () => {});
         }
       );
     }
 
-    // Update the blog information in the database
-    let updateBlogQuery = "UPDATE blogs SET ";
-    const queryParams = [];
-    if (title) {
-      updateBlogQuery += "title = ?, ";
-      queryParams.push(title);
-    }
-    if (content) {
-      updateBlogQuery += "content = ?, ";
-      queryParams.push(content);
-    }
-    if (blogImage) {
-      updateBlogQuery += "image = ?, ";
-      queryParams.push(imagePath);
-    }
+    const sql = `
+      UPDATE blogs SET
+        title = ?,
+        meta_title = ?,
+        meta_description = ?,
+        content = ?,
+        image = ?
+      WHERE id = ?
+    `;
 
-    // Remove the trailing comma and space
-    updateBlogQuery = updateBlogQuery.slice(0, -2);
-    updateBlogQuery += " WHERE id = ?";
-    queryParams.push(id);
-
-    connection.query(updateBlogQuery, queryParams, (err, result) => {
-      if (err) {
-        console.error("Error updating blog:", err);
-        res
-          .status(500)
-          .json({ error: "An error occurred while updating the blog" });
-        return;
+    connection.query(
+      sql,
+      [title, meta_title, meta_description, content, imagePath, id],
+      (err) => {
+        if (err) {
+          return res.status(500).json("Error updating blog");
+        }
+        res.status(200).json({ message: "Blog updated successfully" });
       }
-
-      res.status(200).json({ message: "Blog updated successfully" });
-    });
+    );
   });
 };
+
 
 exports.getBlogById = (req, res) => {
   const { id } = req.params; // Blog ID from the URL

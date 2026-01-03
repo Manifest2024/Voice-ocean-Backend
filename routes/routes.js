@@ -10,6 +10,7 @@ const currentProjects = require("../controller/currentProjects.js");
 const testimonials = require("../controller/testimonials.js");
 const client = require("../controller/client.js");
 const importArist = require("../controller/ImportArtist.js");
+const adminAuth = require("../controller/adminAuth.js");
 
 const router = express.Router();
 
@@ -19,7 +20,8 @@ router.post(
   importArist.upload.single("file"),
   importArist.importArtistsAndSamples
 );
-
+// admin auth
+router.post("/admin/login", adminAuth.adminLogin);
 
 // artist
 router.post("/create/artists", artist.addArtist);

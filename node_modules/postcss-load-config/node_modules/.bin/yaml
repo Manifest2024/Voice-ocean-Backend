@@ -1,11 +1,16 @@
-#!/usr/bin/env node
+#!/bin/sh
+basedir=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
-import { UserError, cli, help } from './dist/cli.mjs'
+case `uname` in
+    *CYGWIN*|*MINGW*|*MSYS*)
+        if command -v cygpath > /dev/null 2>&1; then
+            basedir=`cygpath -w "$basedir"`
+        fi
+    ;;
+esac
 
-cli(process.stdin, error => {
-  if (error instanceof UserError) {
-    if (error.code === UserError.ARGS) console.error(`${help}\n`)
-    console.error(error.message)
-    process.exitCode = error.code
-  } else if (error) throw error
-})
+if [ -x "$basedir/node" ]; then
+  exec "$basedir/node"  "$basedir/../yaml/bin.mjs" "$@"
+else 
+  exec node  "$basedir/../yaml/bin.mjs" "$@"
+fi

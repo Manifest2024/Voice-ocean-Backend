@@ -22,6 +22,7 @@ app.use(cookieParser());
 ======================= */
 app.use("/voice_samples", express.static(path.join(__dirname, "voice_samples")));
 app.use("/client_images", express.static(path.join(__dirname, "client_images")));
+app.use( "/blog_images", express.static(path.join(__dirname, "blog_images")));
 app.use(express.static(path.join(__dirname, "dist")));
 
 /* =======================
