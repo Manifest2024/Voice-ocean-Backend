@@ -2,42 +2,41 @@ const connection = require("../db.js");
 const shortUUID = require("short-uuid");
 
 exports.addTestimonials = (req, res) => {
-  const { seo_title, testimonial_name, location, testimonial_description } =
-    req.body;
+  const { seo_title, testimonial_name, location, testimonial_description } = req.body;
+  const image = req.file ? `testimonial_images/${req.file.filename}` : null;
+
   if (!testimonial_name || !location || !testimonial_description) {
-    return res
-      .status(400)
-      .json(
-        "some fields are missing - testimonial_name, location, testimonial_description "
-      );
+    return res.status(400).json("Required fields missing");
   }
 
   const testimonialId = shortUUID.generate();
-  const sql =
-    "INSERT INTO testimonials (testimonial_id,seo_title, testimonial_name, location, testimonial_description) VALUES (?, ?, ?, ?,?)";
-  const values = [
-    testimonialId,
-    seo_title,
-    testimonial_name,
-    location,
-    testimonial_description,
-  ];
 
-  connection.query(sql, values, (err, result) => {
-    if (err) {
-      console.error("Error inserting data: " + err);
-      res
-        .status(500)
-        .json({
-          error: "An error occurred while inserting data into the database",
-        });
-      return;
+  const sql = `
+    INSERT INTO testimonials 
+    (testimonial_id, seo_title, testimonial_name, location, testimonial_description, image)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  connection.query(
+    sql,
+    [
+      testimonialId,
+      seo_title,
+      testimonial_name,
+      location,
+      testimonial_description,
+      image,
+    ],
+    (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json("Error inserting testimonial");
+      }
+      res.status(201).json({ message: "Testimonial added successfully" });
     }
-
-    console.log("Data inserted successfully:", result);
-    res.status(201).json({ message: "Data inserted successfully" });
-  });
+  );
 };
+
 
 
 
@@ -50,56 +49,59 @@ exports.updateTestimonial = (req, res) => {
     "testimonial_description",
   ];
 
-  if (!testimonialId) {
-    res.status(400).send("Testimonial ID is missing.");
-    return;
-  }
-
   const fieldsToUpdate = [];
   const params = [];
 
   fields.forEach((field) => {
-    if (req.body[field] !== undefined) {
+    if (req.body[field]) {
       fieldsToUpdate.push(`${field} = ?`);
       params.push(req.body[field]);
     }
   });
 
-  if (fieldsToUpdate.length === 0) {
-    res.status(400).send("No fields to update.");
-    return;
+  if (req.file) {
+    fieldsToUpdate.push("image = ?");
+    params.push(`testimonial_images/${req.file.filename}`);
+  }
+
+  if (!fieldsToUpdate.length) {
+    return res.status(400).send("No fields to update.");
   }
 
   params.push(testimonialId);
-  const setClause = fieldsToUpdate.join(", ");
-  const sql = `UPDATE testimonials SET ${setClause} WHERE testimonial_id = ?`;
 
-  connection.query(sql, params, (err, result) => {
+  const sql = `
+    UPDATE testimonials 
+    SET ${fieldsToUpdate.join(", ")}
+    WHERE testimonial_id = ?
+  `;
+
+  connection.query(sql, params, (err) => {
     if (err) {
-      console.error("Error updating testimonial:", err);
-      res.status(500).send("Error updating testimonial");
-      return;
+      console.error(err);
+      return res.status(500).send("Error updating testimonial");
     }
-    console.log("Testimonial updated successfully");
     res.status(200).send("Testimonial updated successfully");
   });
 };
 
 
+
 exports.getAllTestimonials = (req, res) => {
-    const sql = 'SELECT * FROM testimonials';
+  const sql = "SELECT * FROM testimonials";
 
-    connection.query(sql, (err, results) => {
-        if (err) {
-            console.error('Error fetching data: ' + err);
-            res.status(500).json({ error: 'An error occurred while fetching data from the database' });
-            return;
-        }
+  connection.query(sql, (err, results) => {
+    if (err) return res.status(500).json("DB error");
 
-        console.log('Data fetched successfully');
-        res.status(200).json(results);
-    });
+    const data = results.map((t) => ({
+      ...t,
+      image: t.image ? `https://${req.get("host")}/${t.image}` : null,
+    }));
+
+    res.status(200).json(data);
+  });
 };
+
 
 exports.deleteTestimonials = (req, res) => {
     const { testimonialId } = req.params;

@@ -41,7 +41,6 @@ exports.addArtist = (req, res) => {
     name,
     address,
     gender,
-    profile_photo,
     accents,
     roles,
     styles,
@@ -58,45 +57,25 @@ exports.addArtist = (req, res) => {
   } = req.body;
 
   if (!name || !gender) {
-    res.status(400).send("Artist name or gender is missing.");
-    return;
+    return res.status(400).send("Artist name or gender is missing.");
   }
 
-  if (gender !== "Male" && gender !== "Female") {
-    res
-      .status(400)
-      .send("Wrong gender field value. It must be 'Male' or 'Female'.");
-    return;
-  }
+  let profile_photo = null;
 
-  if (
-    service_type &&
-    !["eLearning", "IVR", "Videos", "Commercials"].includes(service_type)
-  ) {
-    return res.status(400).json({
-      error:
-        "Wrong service type value, it must be one of these - 'eLearning', 'IVR', 'Videos', 'Commercials'",
-    });
-  }
-
-  if (
-    artist_tag &&
-    ![
-      "artist_of_the_month",
-      "artist_of_the_year",
-      "artist_of_the_week",
-      "artist_of_the_day",
-    ].includes(artist_tag)
-  ) {
-    return res.status(400).json({
-      error:
-        "Wrong artist_tag value, it must be one of these - 'artist_of_the_month','artist_of_the_week','artist_of_the_day', 'artist_of_the_year'",
-    });
+  if (req.file) {
+    profile_photo = `uploads/artists/${req.file.filename}`;
   }
 
   const artistId = shortUUID.generate();
-  const sql =
-    "INSERT INTO artists (id, name, gender, address, profile_photo, accents, roles, styles, microphone, services_offered, availability_days, availability_time,title,description,languages,category,service_type,artist_tag) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+
+  const sql = `
+    INSERT INTO artists (
+      id, name, gender, address, profile_photo, accents, roles, styles,
+      microphone, services_offered, availability_days, availability_time,
+      title, description, languages, category, service_type, artist_tag
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
   connection.query(
     sql,
     [
@@ -119,17 +98,16 @@ exports.addArtist = (req, res) => {
       service_type,
       artist_tag,
     ],
-    (err, result) => {
+    (err) => {
       if (err) {
-        console.error("Error inserting artist:", err);
-        res.status(500).send("Error inserting artist");
-        return;
+        console.error(err);
+        return res.status(500).send("Error inserting artist");
       }
-      console.log("Artist added successfully");
       res.status(200).send("Artist added successfully");
     }
   );
 };
+
 
 // exports.getArtist = (req, res) => {
 //   const { language, category, gender, service_type, artist_tag } = req.query;
@@ -477,11 +455,15 @@ exports.getArtistDataByName = (req, res) => {
 // update artist
 exports.updateArtist = (req, res) => {
   const { artistId } = req.params;
+
+  if (!artistId) {
+    return res.status(400).send("Artist ID is missing.");
+  }
+
   const fields = [
     "name",
     "address",
     "gender",
-    "profile_photo",
     "accents",
     "roles",
     "styles",
@@ -497,66 +479,44 @@ exports.updateArtist = (req, res) => {
     "artist_tag",
   ];
 
-  if (!artistId) {
-    res.status(400).send("Artist ID is missing.");
-    return;
-  }
-
-  const fieldsToUpdate = [];
-  const params = [];
+  const updates = [];
+  const values = [];
 
   fields.forEach((field) => {
-    if (req.body[field] !== undefined) {
-      fieldsToUpdate.push(`${field} = ?`);
-      params.push(req.body[field]);
+    if (req.body[field] !== undefined && req.body[field] !== "") {
+      updates.push(`${field} = ?`);
+      values.push(req.body[field]);
     }
   });
 
-  if (fieldsToUpdate.length === 0) {
-    res.status(400).send("No fields to update.");
-    return;
+  // ✅ IMAGE UPDATE
+  if (req.file) {
+    updates.push("profile_photo = ?");
+    values.push(`uploads/artists/${req.file.filename}`);
   }
 
-  if (
-    req.body.service_type &&
-    !["eLearning", "IVR", "Videos", "Commercials"].includes(
-      req.body.service_type
-    )
-  ) {
-    return res.status(400).json({
-      error:
-        "Wrong service type value, it must be one of these - 'eLearning', 'IVR', 'Videos', 'Commercials'",
-    });
+  if (updates.length === 0) {
+    return res.status(400).send("No fields to update.");
   }
 
-  if (
-    req.body.artist_tag &&
-    ![
-      "artist_of_the_month",
-      "artist_of_the_year",
-      "artist_of_the_week",
-      "artist_of_the_day",
-    ].includes(req.body.artist_tag)
-  ) {
-    return res.status(400).json({
-      error:
-        "Wrong artist_tag value, it must be one of these - 'artist_of_the_month','artist_of_the_week','artist_of_the_day', 'artist_of_the_year'",
-    });
-  }
+  values.push(artistId);
 
-  params.push(artistId);
-  const setClause = fieldsToUpdate.join(", ");
-  const sql = `UPDATE artists SET ${setClause} WHERE id = ?`;
-  connection.query(sql, params, (err, result) => {
+  const sql = `
+    UPDATE artists
+    SET ${updates.join(", ")}
+    WHERE id = ?
+  `;
+
+  connection.query(sql, values, (err) => {
     if (err) {
-      console.error("Error updating artist:", err);
-      res.status(500).send("Error updating artist");
-      return;
+      console.error(err);
+      return res.status(500).send("Error updating artist");
     }
-    console.log("Artist updated successfully");
     res.status(200).send("Artist updated successfully");
   });
 };
+
+
 
 // delete artist
 exports.deleteArtist = (req, res) => {

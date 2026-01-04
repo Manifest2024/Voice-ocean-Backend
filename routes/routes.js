@@ -22,13 +22,18 @@ router.post(
 );
 // admin auth
 router.post("/admin/login", adminAuth.adminLogin);
+router.post(
+  "/admin/change-password",
+  verifyAdmin,
+  adminAuth.changeAdminPassword
+);
 
 // artist
-router.post("/create/artists", artist.addArtist);
+router.post("/create/artists", upload.single("profile_photo"), artist.addArtist);
+router.patch("/update/artist/:artistId", upload.single("profile_photo"), artist.updateArtist);
 router.get("/artists", artist.getArtist);
 router.get("/artists/profile/:artistId", artist.getArtistData);
 router.get("/artists/profile/name/:name", artist.getArtistDataByName);
-router.patch("/update/artist/:artistId", artist.updateArtist);
 router.delete("/delete/artist/:artistId", artist.deleteArtist);
 router.get("/get/all/artists", artist.getAllArtist);
 router.get("/search/artist", artist.searchArtist);
@@ -93,9 +98,10 @@ router.delete(
 
 // testimonials
 router.get("/get/all/testimonials", testimonials.getAllTestimonials);
-router.post("/add/testimonials", testimonials.addTestimonials);
+router.post("/add/testimonials", upload.single("image"), testimonials.addTestimonials);
 router.patch(
   "/update/testimonials/:testimonialId",
+  upload.single("image"),
   testimonials.updateTestimonial
 );
 router.delete(
