@@ -99,10 +99,10 @@ router.delete(
 
 // testimonials
 router.get("/get/all/testimonials", testimonials.getAllTestimonials);
-router.post("/add/testimonials", upload.single("image"), testimonials.addTestimonials);
+router.post("/add/testimonials", upload.single("testimonial_images"), testimonials.addTestimonials);
 router.patch(
   "/update/testimonials/:testimonialId",
-  upload.single("image"),
+  upload.single("testimonial_images"),
   testimonials.updateTestimonial
 );
 router.delete(
