@@ -11,6 +11,7 @@ const testimonials = require("../controller/testimonials.js");
 const client = require("../controller/client.js");
 const importArist = require("../controller/ImportArtist.js");
 const adminAuth = require("../controller/adminAuth.js");
+const verifyAdmin = require("../controller/verifyAdmin.js");
 
 const router = express.Router();
 
