@@ -63,7 +63,7 @@ exports.addArtist = (req, res) => {
   let profile_photo = null;
 
   if (req.file) {
-    profile_photo = `uploads/artists/${req.file.filename}`;
+    profile_photo = `uploads/${req.file.filename}`;
   }
 
   const artistId = shortUUID.generate();
@@ -492,7 +492,7 @@ exports.updateArtist = (req, res) => {
   // ✅ IMAGE UPDATE
   if (req.file) {
     updates.push("profile_photo = ?");
-    values.push(`uploads/artists/${req.file.filename}`);
+    values.push(`uploads/${req.file.filename}`);
   }
 
   if (updates.length === 0) {

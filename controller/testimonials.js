@@ -3,16 +3,19 @@ const shortUUID = require("short-uuid");
 
 exports.addTestimonials = (req, res) => {
   const { seo_title, testimonial_name, location, testimonial_description } = req.body;
-  const image = req.file ? `testimonial_images/${req.file.filename}` : null;
 
   if (!testimonial_name || !location || !testimonial_description) {
-    return res.status(400).json("Required fields missing");
+    return res.status(400).json({ error: "Required fields missing" });
   }
+
+  const image = req.file
+    ? `testimonial_images/${req.file.filename}`
+    : null;
 
   const testimonialId = shortUUID.generate();
 
   const sql = `
-    INSERT INTO testimonials 
+    INSERT INTO testimonials
     (testimonial_id, seo_title, testimonial_name, location, testimonial_description, image)
     VALUES (?, ?, ?, ?, ?, ?)
   `;
@@ -21,7 +24,7 @@ exports.addTestimonials = (req, res) => {
     sql,
     [
       testimonialId,
-      seo_title,
+      seo_title || null,
       testimonial_name,
       location,
       testimonial_description,
@@ -30,8 +33,9 @@ exports.addTestimonials = (req, res) => {
     (err) => {
       if (err) {
         console.error(err);
-        return res.status(500).json("Error inserting testimonial");
+        return res.status(500).json({ error: "Error inserting testimonial" });
       }
+
       res.status(201).json({ message: "Testimonial added successfully" });
     }
   );
@@ -40,8 +44,10 @@ exports.addTestimonials = (req, res) => {
 
 
 
+
 exports.updateTestimonial = (req, res) => {
   const { testimonialId } = req.params;
+
   const fields = [
     "seo_title",
     "testimonial_name",
@@ -53,7 +59,7 @@ exports.updateTestimonial = (req, res) => {
   const params = [];
 
   fields.forEach((field) => {
-    if (req.body[field]) {
+    if (req.body[field] !== undefined) {
       fieldsToUpdate.push(`${field} = ?`);
       params.push(req.body[field]);
     }
@@ -65,13 +71,13 @@ exports.updateTestimonial = (req, res) => {
   }
 
   if (!fieldsToUpdate.length) {
-    return res.status(400).send("No fields to update.");
+    return res.status(400).json({ error: "No fields to update" });
   }
 
   params.push(testimonialId);
 
   const sql = `
-    UPDATE testimonials 
+    UPDATE testimonials
     SET ${fieldsToUpdate.join(", ")}
     WHERE testimonial_id = ?
   `;
@@ -79,11 +85,13 @@ exports.updateTestimonial = (req, res) => {
   connection.query(sql, params, (err) => {
     if (err) {
       console.error(err);
-      return res.status(500).send("Error updating testimonial");
+      return res.status(500).json({ error: "Error updating testimonial" });
     }
-    res.status(200).send("Testimonial updated successfully");
+
+    res.status(200).json({ message: "Testimonial updated successfully" });
   });
 };
+
 
 
 
