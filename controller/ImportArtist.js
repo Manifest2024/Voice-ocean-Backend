@@ -4,9 +4,11 @@ const fs = require("fs");
 const shortUUID = require("short-uuid");
 const { v4: uuidv4 } = require("uuid");
 const connection = require("../db.js");
+const upload = require("./upload")
 
 // Multer setup for file upload
-exports.upload = multer({ dest: "uploads/" });
+exports.upload = upload;
+// exports.upload = multer({ dest: "uploads/" });
 
 // exports.importArtistsAndSamples = (req, res) => {
 //   const file = req.file;
@@ -210,7 +212,7 @@ exports.importArtistsAndSamples = (req, res) => {
             artist_name,
             gender || null,
             address || null,
-            profile_photo || null,
+            profile_photo ? `artist_images/${profile_photo}` : null,
             accents || null,
             roles || null,
             styles || null,

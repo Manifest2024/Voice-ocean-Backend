@@ -93,22 +93,16 @@ exports.updateTestimonial = (req, res) => {
 };
 
 
-
-
 exports.getAllTestimonials = (req, res) => {
   const sql = "SELECT * FROM testimonials";
 
   connection.query(sql, (err, results) => {
     if (err) return res.status(500).json("DB error");
 
-    const data = results.map((t) => ({
-      ...t,
-      image: t.image ? `https://${req.get("host")}/${t.image}` : null,
-    }));
-
-    res.status(200).json(data);
+    res.status(200).json(results); // ✅ return raw path
   });
 };
+
 
 
 exports.deleteTestimonials = (req, res) => {

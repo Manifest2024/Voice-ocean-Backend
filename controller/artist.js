@@ -63,7 +63,7 @@ exports.addArtist = (req, res) => {
   let profile_photo = null;
 
   if (req.file) {
-    profile_photo = `uploads/${req.file.filename}`;
+    profile_photo = `artist_images/${req.file.filename}`;
   }
 
   const artistId = shortUUID.generate();
@@ -355,7 +355,7 @@ exports.getArtistData = (req, res) => {
                 return;
               }
 
-              const baseURL = "https://admin.voiceoceanllp.com/api/";
+              const baseURL = "http://localhost:4000/api/";
               const updatedVoiceSamples = voiceSamplesResults.map((sample) => ({
                 ...sample,
                 sample: `${baseURL}${sample.sample}`,
@@ -431,7 +431,7 @@ exports.getArtistDataByName = (req, res) => {
                 return;
               }
 
-              const baseURL = "https://admin.voiceoceanllp.com/api/";
+              const baseURL = "http://localhost:4000/api/";
               const updatedVoiceSamples = voiceSamplesResults.map((sample) => ({
                 ...sample,
                 sample: `${baseURL}${sample.sample}`,
@@ -492,7 +492,7 @@ exports.updateArtist = (req, res) => {
   // ✅ IMAGE UPDATE
   if (req.file) {
     updates.push("profile_photo = ?");
-    values.push(`uploads/${req.file.filename}`);
+    values.push(`artist_images/${req.file.filename}`);
   }
 
   if (updates.length === 0) {
