@@ -64,6 +64,11 @@ router.patch(
   upload.single("sample"),
   voiceSample.updateVoiceSample
 );
+router.post(
+  "/add/voice/sample",
+  upload.single("sample"),
+  voiceSample.addVoiceSample
+);
 
 
 // language
