@@ -65,7 +65,7 @@ router.patch(
   voiceSample.updateVoiceSample
 );
 router.post(
-  "/add/voice/sample",
+  "/add/voice/samples",
   upload.single("sample"),
   voiceSample.addVoiceSample
 );
